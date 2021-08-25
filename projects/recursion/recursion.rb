@@ -1,3 +1,5 @@
+require "byebug"
+
 def range(start, last)
    return [] if last < start
    return [start] if last - start == 1
@@ -100,24 +102,22 @@ end
 # end
 
 def bsearch(arr, target)
-    return nil if (arr.length == 1) && (target != arr.first)
-    return nil if (target < arr.first) || (target > arr.last)
-    
+    return nil if arr.length < 1 
 
     mid_val = arr.length / 2
-    return mid_val if arr[mid_val] == target
 
-    new_arr = [mid_val]
-
-    left = arr[0...mid_val]
-    right = arr[mid_val..-1]
-
-    if arr[mid_val] < target
-        mid_val << bsearch(right, target)
+    if arr[mid_val] == target
+        return mid_val
+    elsif arr[mid_val] < target 
+        idx = bsearch(arr[mid_val+1..-1], target)
+        if idx != nil
+            mid_val + idx + 1
+        else
+            nil
+        end
     else
-        bsearch(left, target)
+        bsearch(arr[0...mid_val], target)
     end
-
 end
 
 # p bsearch([1, 2, 3], 1) # => 0
@@ -128,4 +128,57 @@ end
 # p bsearch([1, 2, 3, 4, 5, 6], 0) # => nil
 # p bsearch([1, 2, 3, 4, 5, 7], 6) # => nil
 
-def merge_sort
+def merge_sort(arr)
+    return arr if arr.length <= 1
+    mid_val = arr.length / 2
+    lower = arr[0...mid_val]
+    upper = arr[mid_val..-1]
+    arr1 = merge_sort(upper)
+    arr2 = merge_sort(lower)
+    merge(arr1, arr2)
+end
+
+def merge(arr1, arr2)
+    result = []
+    idx1 = 0
+    idx2 = 0
+    while idx1 < arr1.length && idx2 < arr2.length
+        if arr1[idx1] < arr2[idx2]
+            result.push(arr1[idx1])
+            idx1 += 1
+        else
+            result.push(arr2[idx2])
+            idx2 += 1
+        end
+    end
+    result.concat(arr1[idx1..-1])
+    result.concat(arr2[idx2..-1])
+    result
+end
+
+# p merge_sort([7, 4, 3, 9, 6, 2, 1])
+# [7 4 3] [9 6 2 1]
+# [7] [4 3] [9 6] [2 1]
+# [ ] [7] [4] [3]
+# [7] [3, 4]
+# [3 , 4 , 7]
+
+
+def subsets(arr)
+    results = []
+    
+    return [] if arr.length == 0
+    return arr if arr.length == 1
+    
+    results << subsets(arr[0...-1])
+    
+    subsets(arr[0...-1]).each do |ele|
+        results << (ele << arr[-1])
+    end
+    results
+end
+
+p subsets([]) # => [[]]
+p subsets([1]) # => [[], [1]]
+p subsets([1, 2]) # => [[], [1], [2], [1, 2]]
+p subsets([1, 2, 3]) # => [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]]
