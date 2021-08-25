@@ -109,6 +109,7 @@ def bsearch(arr, target)
     if arr[mid_val] == target
         return mid_val
     elsif arr[mid_val] < target 
+        # mid_val + bsearch(arr[mid_val..-1], target)
         idx = bsearch(arr[mid_val+1..-1], target)
         if idx != nil
             mid_val + idx + 1
@@ -178,7 +179,28 @@ def subsets(arr)
     results
 end
 
-p subsets([]) # => [[]]
-p subsets([1]) # => [[], [1]]
-p subsets([1, 2]) # => [[], [1], [2], [1, 2]]
-p subsets([1, 2, 3]) # => [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]]
+# p subsets([]) # => [[]]
+# p subsets([1]) # => [[], [1]]
+# p subsets([1, 2]) # => [[], [1], [2], [1, 2]]
+# p subsets([1, 2, 3]) # => [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]]
+
+
+def permutations(arr)
+    
+    result = [] 
+    ele = arr[-1]
+    first = permutation(arr[0...-1])
+    first.each do |el|
+        i = 0
+        while i < el.length
+        result << (el << ele)
+        result << el.shift(ele)
+        end
+    end
+
+    
+end
+
+p permutations([1, 2, 3]) # => [[1, 2, 3], [1, 3, 2],
+                        #     [2, 1, 3], [2, 3, 1],
+                        #     [3, 1, 2], [3, 2, 1]]
