@@ -169,47 +169,44 @@ def subsets(arr)
     results = []
     
     return [[]] if arr.length == 0
-    # return arr if arr.length == 1
+    
     prev_subs = subsets(arr[0...-1])
     new_arr = prev_subs
-    # results << subsets(arr[0...-1])
-
     
-    # new_arr = prev_subs.map do |ele|
-    #     debugger
-    #     (ele + [arr[-1]])
-    # end
-    # prev_subs + new_arr
-     prev_subs.each do |ele|
-        debugger
-        prev_subs << (ele << arr[-1])
+    new_arr = prev_subs.map do |ele|
+
+        (ele + [arr[-1]])
     end
-    prev_subs 
+    prev_subs + new_arr
 
 end
 
 # p subsets([]) # => [[]]
 # p subsets([1]) # => [[], [1]]
-p subsets([1, 2]) # => [[], [1], [2], [1, 2]]
+# subsets([1, 2]) # => [[], [1], [2], [1, 2]]
 # p subsets([1, 2, 3]) # => [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]]
 
 
 def permutations(arr)
-    
+    if arr.length == 1
+        return [arr]
+    end
     result = [] 
     ele = arr[-1]
-    first = permutation(arr[0...-1])
-    first.each do |el|
+    puts arr[0...-1]
+    first = permutations(arr[0...-1])
+    new_array = first.each do |el|
         i = 0
         while i < el.length
-        result << (el << ele)
-        result << el.shift(ele)
+            result << (el[0...i] + [ele] + el[i...-1])
+            i += 1
         end
     end
+    result
 
     
 end
 
-# p permutations([1, 2, 3]) # => [[1, 2, 3], [1, 3, 2],
+p permutations([1, 2, 3]) # => [[1, 2, 3], [1, 3, 2],
                         #     [2, 1, 3], [2, 3, 1],
                         #     [3, 1, 2], [3, 2, 1]]
