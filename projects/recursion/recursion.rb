@@ -1,3 +1,5 @@
+require "byebug"
+
 def range(start, last)
    return [] if last < start
    return [start] if last - start == 1
@@ -82,25 +84,63 @@ end
 # p fib(7)
 
 def bsearch(arr, target)
-    return 0 if arr.length == 1 
-    
+    return nil if arr.length < 1 
+
     mid_val = arr.length / 2
-    return mid_val if arr[mid_val] == target
-    if arr[mid_val] < target 
-        idx = mid_val + bsearch(arr[mid_val..-1], target)
-        if arr[idx] == target  
-            return idx  
-        else    
-            return nil
+
+    if arr[mid_val] == target
+        return mid_val
+    elsif arr[mid_val] < target 
+        idx = bsearch(arr[mid_val+1..-1], target)
+        if idx != nil
+            mid_val + idx + 1
+        else
+            nil
         end
+    else
+        bsearch(arr[0...mid_val], target)
     end
-    return bsearch(arr[0...mid_val], target) 
 end
 
-p bsearch([1, 2, 3], 1) # => 0
-p bsearch([2, 3, 4, 5], 3) # => 1
-p bsearch([2, 4, 6, 8, 10], 6) # => 2
-p bsearch([1, 3, 4, 5, 9], 5) # => 3
-p bsearch([1, 2, 3, 4, 5, 6], 6) # => 5
+# p bsearch([1, 2, 3], 1) # => 0
+# p bsearch([2, 3, 4, 5], 3) # => 1
+# p bsearch([2, 4, 6, 8, 10], 6) # => 2
+# p bsearch([1, 3, 4, 5, 9], 5) # => 3
+# p bsearch([1, 2, 3, 4, 5, 6], 6) # => 5
 # p bsearch([1, 2, 3, 4, 5, 6], 0) # => nil
-p bsearch([1, 2, 3, 4, 5, 7], 6) # => nil
+# p bsearch([1, 2, 3, 4, 5, 7], 6) # => nil
+
+def merge_sort(arr)
+    return arr if arr.length <= 1
+    mid_val = arr.length / 2
+    lower = arr[0...mid_val]
+    upper = arr[mid_val..-1]
+    arr1 = merge_sort(upper)
+    arr2 = merge_sort(lower)
+    merge(arr1, arr2)
+end
+
+def merge(arr1, arr2)
+    result = []
+    idx1 = 0
+    idx2 = 0
+    while idx1 < arr1.length && idx2 < arr2.length
+        if arr1[idx1] < arr2[idx2]
+            result.push(arr1[idx1])
+            idx1 += 1
+        else
+            result.push(arr2[idx2])
+            idx2 += 1
+        end
+    end
+    result.concat(arr1[idx1..-1])
+    result.concat(arr2[idx2..-1])
+    result
+end
+
+# p merge_sort([7, 4, 3, 9, 6, 2, 1])
+# [7 4 3] [9 6 2 1]
+# [7] [4 3] [9 6] [2 1]
+# [ ] [7] [4] [3]
+# [7] [3, 4]
+# [3 , 4 , 7]
