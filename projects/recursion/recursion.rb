@@ -81,26 +81,51 @@ end
 # p fib(1)
 # p fib(7)
 
-def bsearch(arr, target)
-    return 0 if arr.length == 1 
+# def bsearch(arr, target)
+#     return nil if target < arr.first
+#     return nil if arr.last < target
+#     # return nil if arr.length == 1 
     
+#     mid_val = arr.length / 2
+#     return mid_val if arr[mid_val] == target
+#     if arr[mid_val] < target 
+#         idx = mid_val + bsearch(arr[mid_val..-1], target)
+#         if arr[idx] == target  
+#             return idx  
+#         else    
+#             return nil
+#         end
+#     end
+#     return bsearch(arr[0...mid_val], target) 
+# end
+
+def bsearch(arr, target)
+    return nil if (arr.length == 1) && (target != arr.first)
+    return nil if (target < arr.first) || (target > arr.last)
+    
+
     mid_val = arr.length / 2
     return mid_val if arr[mid_val] == target
-    if arr[mid_val] < target 
-        idx = mid_val + bsearch(arr[mid_val..-1], target)
-        if arr[idx] == target  
-            return idx  
-        else    
-            return nil
-        end
+
+    new_arr = [mid_val]
+
+    left = arr[0...mid_val]
+    right = arr[mid_val..-1]
+
+    if arr[mid_val] < target
+        mid_val << bsearch(right, target)
+    else
+        bsearch(left, target)
     end
-    return bsearch(arr[0...mid_val], target) 
+
 end
 
-p bsearch([1, 2, 3], 1) # => 0
-p bsearch([2, 3, 4, 5], 3) # => 1
-p bsearch([2, 4, 6, 8, 10], 6) # => 2
-p bsearch([1, 3, 4, 5, 9], 5) # => 3
-p bsearch([1, 2, 3, 4, 5, 6], 6) # => 5
+# p bsearch([1, 2, 3], 1) # => 0
+# p bsearch([2, 3, 4, 5], 3) # => 1
+# p bsearch([2, 4, 6, 8, 10], 6) # => 2
+# p bsearch([1, 3, 4, 5, 9], 5) # => 3
+# p bsearch([1, 2, 3, 4, 5, 6], 6) # => 5
 # p bsearch([1, 2, 3, 4, 5, 6], 0) # => nil
-p bsearch([1, 2, 3, 4, 5, 7], 6) # => nil
+# p bsearch([1, 2, 3, 4, 5, 7], 6) # => nil
+
+def merge_sort
