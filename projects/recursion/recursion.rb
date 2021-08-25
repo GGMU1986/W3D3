@@ -50,7 +50,7 @@ end
 # p exp2(1, 0) # 1
 # p exp2(3,3) #27
 
-def deep_dup (arr)
+def deep_dup(arr)
     result = []
     arr.each do |ele|
         if ele.is_a?(Array)
@@ -163,25 +163,34 @@ end
 # [ ] [7] [4] [3]
 # [7] [3, 4]
 # [3 , 4 , 7]
-
+require "byebug"
 
 def subsets(arr)
     results = []
     
-    return [] if arr.length == 0
-    return arr if arr.length == 1
+    return [[]] if arr.length == 0
+    # return arr if arr.length == 1
+    prev_subs = subsets(arr[0...-1])
+    new_arr = prev_subs
+    # results << subsets(arr[0...-1])
+
     
-    results << subsets(arr[0...-1])
-    
-    subsets(arr[0...-1]).each do |ele|
-        results << (ele << arr[-1])
+    # new_arr = prev_subs.map do |ele|
+    #     debugger
+    #     (ele + [arr[-1]])
+    # end
+    # prev_subs + new_arr
+     prev_subs.each do |ele|
+        debugger
+        prev_subs << (ele << arr[-1])
     end
-    results
+    prev_subs 
+
 end
 
 # p subsets([]) # => [[]]
 # p subsets([1]) # => [[], [1]]
-# p subsets([1, 2]) # => [[], [1], [2], [1, 2]]
+p subsets([1, 2]) # => [[], [1], [2], [1, 2]]
 # p subsets([1, 2, 3]) # => [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]]
 
 
@@ -201,6 +210,6 @@ def permutations(arr)
     
 end
 
-p permutations([1, 2, 3]) # => [[1, 2, 3], [1, 3, 2],
+# p permutations([1, 2, 3]) # => [[1, 2, 3], [1, 3, 2],
                         #     [2, 1, 3], [2, 3, 1],
                         #     [3, 1, 2], [3, 2, 1]]
